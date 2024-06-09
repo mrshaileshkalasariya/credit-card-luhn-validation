@@ -21,15 +21,22 @@ namespace CreditCardValidatorAPI.Controllers
         [HttpPost("validate_cc_number")]
         public ActionResult<bool> validate_cc_number([FromBody] CreditCardRequest request)
         {
-            // Check if the request is null or the credit card number is empty
-            if (request == null || string.IsNullOrWhiteSpace(request.CreditCardNumber))
+            try
             {
-                return BadRequest("Credit card number is required.");  // Return bad request response
-            }
+                // Check if the request is null or the credit card number is empty
+                if (request == null || string.IsNullOrWhiteSpace(request.CreditCardNumber))
+                {
+                    return BadRequest("Credit card number is required.");  // Return bad request response
+                }
 
-            // Call the validation method and store the result
-            var isValid = _creditCardValidator.validate_cc_number(request.CreditCardNumber);
-            return Ok(isValid);  // Return the result as OK response
+                // Call the validation method and store the result
+                var isValid = _creditCardValidator.validate_cc_number(request.CreditCardNumber);
+                return Ok(isValid);  // Return the result as OK response
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Something went wrong : " + ex.Message);  // Return bad request response
+            }            
         }
     }
 }
